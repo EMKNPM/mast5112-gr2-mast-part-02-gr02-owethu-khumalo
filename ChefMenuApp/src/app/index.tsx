@@ -5,12 +5,19 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Image,
 } from 'react-native';
+import { useRouter } from 'expo-router';
 
 export default function HomeScreen() {
+ const router = useRouter(); 
   return (
     <View style={styles.container}>
       <View style={styles.content}>
+         <Image
+    source={require('../../assets/images/Chef logo.png')}
+    style={styles.logoImage}
+  />
         <Text style={styles.logo}>ChefMenu</Text>
 
         <Text style={styles.title}>
@@ -24,7 +31,7 @@ export default function HomeScreen() {
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => {}}
+         onPress={() => router.push('/menu')}
         >
           <Text style={styles.buttonText}>
             VIEW MENU
@@ -76,6 +83,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 45,
     borderRadius: 10,
   },
+  logoImage: {
+  width: 120,
+  height: 120,
+  resizeMode: 'contain',
+  marginBottom: 20,
+},
 
   buttonText: {
     color: '#FFFFFF',
