@@ -1,43 +1,46 @@
-
-import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Image,
-} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 
 export default function HomeScreen() {
- const router = useRouter(); 
+  const router = useRouter();
+
   return (
     <View style={styles.container}>
-      <View style={styles.content}>
-         <Image
-    source={require('../../assets/images/Chef logo.png')}
-    style={styles.logoImage}
-  />
-        <Text style={styles.logo}>ChefMenu</Text>
 
-        <Text style={styles.title}>
-          Discover Delicious Meals
+      <Image
+        source={require('../../assets/images/Chef logo.png')}
+        style={styles.logoImage}
+      />
+
+      <Text style={styles.title}>ChefMenu</Text>
+
+      <Text style={styles.subtitle}>
+        Restaurant Menu Management
+      </Text>
+
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>Welcome, Chef Christoffel</Text>
+
+        <Text style={styles.cardText}>
+          Manage your restaurant menu by adding and viewing
+          menu items in one place.
         </Text>
-
-        <Text style={styles.description}>
-          Explore our menu and find your favourite meals,
-          snacks and drinks all in one place.
-        </Text>
-
-        <TouchableOpacity
-          style={styles.button}
-         onPress={() => router.push('/menu')}
-        >
-          <Text style={styles.buttonText}>
-            VIEW MENU
-          </Text>
-        </TouchableOpacity>
       </View>
+
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => router.push('/menu')}
+      >
+        <Text style={styles.buttonText}>VIEW MENU</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => {}}
+      >
+        <Text style={styles.addButtonText}>ADD MENU ITEM</Text>
+      </TouchableOpacity>
+
     </View>
   );
 }
@@ -46,54 +49,79 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF8F0',
-    justifyContent: 'center',
-  },
-
-  content: {
     alignItems: 'center',
-    paddingHorizontal: 30,
+    paddingHorizontal: 25,
+    paddingTop: 60,
   },
 
-  logo: {
-    fontSize: 34,
-    fontWeight: 'bold',
-    color: '#8B4513',
-    marginBottom: 40,
+  logoImage: {
+    width: 110,
+    height: 110,
+    resizeMode: 'contain',
+    marginBottom: 10,
   },
 
   title: {
-    fontSize: 30,
+    fontSize: 32,
     fontWeight: 'bold',
     color: '#2F1B12',
-    textAlign: 'center',
-    marginBottom: 15,
   },
 
-  description: {
-    fontSize: 17,
+  subtitle: {
+    fontSize: 16,
+    color: '#8B4513',
+    marginTop: 5,
+    marginBottom: 30,
+  },
+
+  card: {
+    width: '100%',
+    backgroundColor: '#FFFFFF',
+    padding: 20,
+    borderRadius: 15,
+    marginBottom: 25,
+  },
+
+  cardTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#2F1B12',
+    marginBottom: 10,
+  },
+
+  cardText: {
+    fontSize: 15,
     color: '#5C4A42',
-    textAlign: 'center',
-    lineHeight: 26,
-    marginBottom: 35,
+    lineHeight: 22,
   },
 
   button: {
+    width: '100%',
     backgroundColor: '#8B4513',
     paddingVertical: 15,
-    paddingHorizontal: 45,
     borderRadius: 10,
+    alignItems: 'center',
+    marginBottom: 15,
   },
-  logoImage: {
-  width: 120,
-  height: 120,
-  resizeMode: 'contain',
-  marginBottom: 20,
-},
 
   buttonText: {
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
   },
-});
 
+  addButton: {
+    width: '100%',
+    borderWidth: 2,
+    borderColor: '#8B4513',
+    paddingVertical: 13,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+
+  addButtonText: {
+    color: '#8B4513',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});
