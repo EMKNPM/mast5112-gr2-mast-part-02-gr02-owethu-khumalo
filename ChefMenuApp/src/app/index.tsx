@@ -33,11 +33,12 @@ export default function HomeScreen() {
       >
         <Text style={styles.buttonText}>VIEW MENU</Text>
       </TouchableOpacity>
-
       <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => {}}
-      >
+  style={styles.addButton}
+  onPress={() => router.push('/add-item')}
+>
+
+      
         <Text style={styles.addButtonText}>ADD MENU ITEM</Text>
       </TouchableOpacity>
 
