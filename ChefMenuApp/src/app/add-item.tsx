@@ -1,4 +1,5 @@
-import { useState } from 'react';
+
+import { useContext, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,35 +9,71 @@ import {
   Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import { MenuContext } from './_layout';
+import type { MenuItem } from '../data/menuData';
 
 export default function AddItemScreen() {
   const router = useRouter();
+  const context = useContext(MenuContext);
 
   const [dishName, setDishName] = useState('');
   const [description, setDescription] = useState('');
   const [course, setCourse] = useState('');
   const [price, setPrice] = useState('');
 
-  const handleAddItem = () => {
-    if (!dishName || !description || !course || !price) {
-      Alert.alert(
-        'Missing Information',
-        'Please complete all fields before adding the menu item.'
-      );
-      return;
-    }
+  if (!context) {
+    return null;
+  }
 
+  const { menuItems, setMenuItems } = context;
+  Alert.alert('Test', 'The button is working!');
+
+ const handleAddItem = () => {
+  console.log('Add item pressed');
+
+  if (
+    !dishName.trim() ||
+    !description.trim() ||
+    !course.trim() ||
+    !price.trim()
+  ) {
     Alert.alert(
-      'Success',
-      'Menu item has been added successfully.',
-      [
-        {
-          text: 'OK',
-          onPress: () => router.back(),
-        },
-      ]
+      'Missing Information',
+      'Please complete all fields.'
     );
+    return;
+  }
+
+  const priceNumber = Number(price);
+
+  if (!Number.isFinite(priceNumber) || priceNumber <= 0) {
+    Alert.alert(
+      'Invalid Price',
+      'Enter a price greater than zero.'
+    );
+    return;
+  }
+
+  const newItem: MenuItem = {
+    id: Date.now().toString(),
+    name: dishName.trim(),
+    description: description.trim(),
+    course: course.trim(),
+    price: priceNumber.toFixed(2),
   };
+
+  setMenuItems((currentItems) => [
+    ...currentItems,
+    newItem,
+  ]);
+
+  router.replace('/menu');
+
+  Alert.alert(
+    'Success',
+    `${dishName.trim()} has been added successfully.`
+  );
+};
 
   return (
     <View style={styles.container}>
@@ -67,21 +104,21 @@ export default function AddItemScreen() {
         onChangeText={setCourse}
       />
 
-      <Text style={styles.label}>Price</Text>
+      <Text style={styles.label}>Price (R)</Text>
       <TextInput
         style={styles.input}
         placeholder="Enter price"
         value={price}
         onChangeText={setPrice}
-        keyboardType="numeric"
+        keyboardType="decimal-pad"
       />
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleAddItem}
-      >
-        <Text style={styles.buttonText}>ADD MENU ITEM</Text>
-      </TouchableOpacity>
+    <TouchableOpacity
+  style={styles.button}
+  onPress={handleAddItem}
+>
+  <Text style={styles.buttonText}>ADD MENU ITEM</Text>
+</TouchableOpacity>
 
       <TouchableOpacity
         style={styles.cancelButton}
@@ -100,7 +137,6 @@ const styles = StyleSheet.create({
     padding: 25,
     paddingTop: 60,
   },
-
   title: {
     fontSize: 30,
     fontWeight: 'bold',
@@ -108,14 +144,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 30,
   },
-
   label: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#2F1B12',
     marginBottom: 7,
   },
-
   input: {
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
@@ -126,12 +160,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 18,
   },
-
   descriptionInput: {
     height: 90,
     textAlignVertical: 'top',
   },
-
   button: {
     backgroundColor: '#8B4513',
     paddingVertical: 15,
@@ -139,19 +171,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
   },
-
   buttonText: {
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
   },
-
   cancelButton: {
     paddingVertical: 15,
     alignItems: 'center',
     marginTop: 10,
   },
-
   cancelText: {
     color: '#8B4513',
     fontSize: 16,
