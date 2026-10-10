@@ -20,6 +20,7 @@ export default function AddItemScreen() {
   const [description, setDescription] = useState('');
   const [course, setCourse] = useState('');
   const [price, setPrice] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   if (!context) {
     return null;
@@ -28,31 +29,27 @@ export default function AddItemScreen() {
   const { menuItems, setMenuItems } = context;
   Alert.alert('Test', 'The button is working!');
 
- const handleAddItem = () => {
+const handleAddItem = () => {
   console.log('Add item pressed');
 
-  if (
-    !dishName.trim() ||
-    !description.trim() ||
-    !course.trim() ||
-    !price.trim()
-  ) {
-    Alert.alert(
-      'Missing Information',
-      'Please complete all fields.'
-    );
-    return;
-  }
+ if (
+  !dishName.trim() ||
+  !description.trim() ||
+  !course.trim() ||
+  !price.trim()
+) {
+  setErrorMessage('Please complete all fields before adding the dish.');
+  return;
+}
 
-  const priceNumber = Number(price);
+const priceNumber = Number(price);
 
-  if (!Number.isFinite(priceNumber) || priceNumber <= 0) {
-    Alert.alert(
-      'Invalid Price',
-      'Enter a price greater than zero.'
-    );
-    return;
-  }
+if (!Number.isFinite(priceNumber) || priceNumber <= 0) {
+  setErrorMessage('Please enter a valid price greater than R0.');
+  return;
+}
+
+setErrorMessage('');
 
   const newItem: MenuItem = {
     id: Date.now().toString(),
@@ -62,17 +59,12 @@ export default function AddItemScreen() {
     price: priceNumber.toFixed(2),
   };
 
-  setMenuItems((currentItems) => [
+   setMenuItems((currentItems) => [
     ...currentItems,
     newItem,
   ]);
 
-  router.replace('/menu');
-
-  Alert.alert(
-    'Success',
-    `${dishName.trim()} has been added successfully.`
-  );
+  router.push('/menu');
 };
 
   return (
@@ -112,20 +104,28 @@ export default function AddItemScreen() {
         onChangeText={setPrice}
         keyboardType="decimal-pad"
       />
+      {errorMessage ? (
+  <Text style={styles.errorText}>
+    {errorMessage}
+  </Text>
+) : null}
 
     <TouchableOpacity
   style={styles.button}
   onPress={handleAddItem}
 >
+
   <Text style={styles.buttonText}>ADD MENU ITEM</Text>
 </TouchableOpacity>
 
       <TouchableOpacity
-        style={styles.cancelButton}
-        onPress={() => router.back()}
-      >
-        <Text style={styles.cancelText}>CANCEL</Text>
-      </TouchableOpacity>
+  style={styles.cancelButton}
+  onPress={() => {
+    router.replace('/');
+  }}
+>
+  <Text style={styles.cancelText}>CANCEL</Text>
+</TouchableOpacity>
     </View>
   );
 }
@@ -186,4 +186,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  errorText: {
+  color: '#D32F2F',
+  fontSize: 14,
+  fontWeight: 'bold',
+  marginBottom: 10,
+},
 });
